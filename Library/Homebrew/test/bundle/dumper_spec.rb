@@ -44,6 +44,7 @@ RSpec.describe Homebrew::Bundle::Dumper do
     allow(Homebrew::Bundle::Go).to receive(:package_manager_executable).and_return(nil)
     allow(Homebrew::Bundle::Cargo).to receive(:package_manager_executable).and_return(nil)
     allow(Homebrew::Bundle::Uv).to receive(:package_manager_executable).and_return(nil)
+    allow(Homebrew::Bundle::Mise).to receive(:package_manager_executable).and_return(nil)
     allow(Tap).to receive(:select).and_return([])
   end
 
@@ -102,17 +103,19 @@ RSpec.describe Homebrew::Bundle::Dumper do
     allow(Homebrew::Bundle::Cargo).to receive(:dump).and_return('cargo "ripgrep"')
     allow(Homebrew::Bundle::Uv).to receive(:dump).and_return('uv "mkdocs"')
     allow(Homebrew::Bundle::Flatpak).to receive(:dump).and_return('flatpak "org.gnome.Calculator"')
+    allow(Homebrew::Bundle::Mise).to receive(:dump).and_return('mise "node@20"')
 
     expect(dumper.build_brewfile(
              describe: false, no_restart: false, formulae: false, taps: false, casks: false,
              extension_types: { mas: false, winget: true, vscode: false, cargo: true, flatpak: true, go: true,
-                                uv: true }
+                                uv: true, mise: true }
            )).to eql(<<~BREWFILE)
              go "github.com/charmbracelet/crush"
              cargo "ripgrep"
              uv "mkdocs"
              flatpak "org.gnome.Calculator"
              winget "PowerToys", id: "XP89DCGQ3K6VLD", source: "msstore"
+             mise "node@20"
            BREWFILE
   end
 end

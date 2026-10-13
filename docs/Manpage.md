@@ -160,8 +160,8 @@ and are now no longer needed.
 
 Bundler for non-Ruby dependencies from Homebrew formulae, Homebrew casks, Mac
 App Store dependencies, VSCode (and forks/variants) extensions, Go packages,
-Cargo packages, uv tools, Flatpak packages, WinGet packages, Krew plugins and
-npm packages.
+Cargo packages, uv tools, Flatpak packages, WinGet packages, mise tools, Krew
+plugins and npm packages.
 
 Note: Flatpak support is only available on Linux.
 
@@ -202,9 +202,9 @@ Note: Flatpak support is only available on Linux.
 
 : Remove entries that match `name` from your `Brewfile`. Use `--formula`,
   `--cask`, `--tap`, `--mas`, `--vscode`, `--go`, `--cargo`, `--uv`,
-  `--flatpak`, `--winget`, `--krew` and `--npm` to remove only entries of the
-  corresponding type. Passing `--formula` also removes matches against formula
-  aliases and old formula names.
+  `--flatpak`, `--winget`, `--mise`, `--krew` and `--npm` to remove only entries
+  of the corresponding type. Passing `--formula` also removes matches against
+  formula aliases and old formula names.
 
 `--install`
 
@@ -250,6 +250,10 @@ Note: Flatpak support is only available on Linux.
 `--winget`
 
 : Remove entries for WinGet packages. Note: WSL only.
+
+`--mise`
+
+: Remove entries for mise tools.
 
 `--krew`
 
@@ -312,6 +316,10 @@ By default, only Homebrew formula dependencies are listed.
 `--winget`
 
 : List WinGet packages. Note: WSL only.
+
+`--mise`
+
+: List mise tools.
 
 `--krew`
 
@@ -519,6 +527,10 @@ flags which will help with finding keg-only dependencies like `openssl`,
 
 : Dump WinGet packages. Note: WSL only.
 
+`--mise`
+
+: Dump mise tools.
+
 `--krew`
 
 : Dump Krew plugins.
@@ -596,6 +608,16 @@ flags which will help with finding keg-only dependencies like `openssl`,
 
 : `dump` without WinGet packages. Enabled by default if
   `$HOMEBREW_BUNDLE_DUMP_NO_WINGET` is set.
+
+`--no-mise`
+
+: `dump` without mise tools. Enabled by default if
+  `$HOMEBREW_BUNDLE_DUMP_NO_MISE` is set.
+
+`--no-dump-mise`
+
+: `dump` without mise tools. Enabled by default if
+  `$HOMEBREW_BUNDLE_DUMP_NO_MISE` is set.
 
 `--no-krew`
 
@@ -792,6 +814,20 @@ Unless `--force` is passed, this prompts before removing anything and returns a
 : `cleanup` without WinGet packages. Enabled by default if
   `$HOMEBREW_BUNDLE_CLEANUP_NO_WINGET` is set.
 
+`--mise`
+
+: Clean up mise tools.
+
+`--no-mise`
+
+: `cleanup` without mise tools. Enabled by default if
+  `$HOMEBREW_BUNDLE_CLEANUP_NO_MISE` is set.
+
+`--no-cleanup-mise`
+
+: `cleanup` without mise tools. Enabled by default if
+  `$HOMEBREW_BUNDLE_CLEANUP_NO_MISE` is set.
+
 `--krew`
 
 : Clean up Krew plugins.
@@ -848,8 +884,8 @@ useful for scripting. Use `--verbose` to list unmet dependencies.
 `brew bundle add` *`name`* \[...\]
 
 : Add entries to your `Brewfile`. Adds formulae by default. Use `--cask`,
-  `--tap`, `--vscode`, `--go`, `--cargo`, `--uv`, `--flatpak`, `--krew` and
-  `--npm` to add the corresponding entry instead.
+  `--tap`, `--vscode`, `--go`, `--cargo`, `--uv`, `--flatpak`, `--mise`,
+  `--krew` and `--npm` to add the corresponding entry instead.
 
 `--install`
 
@@ -886,6 +922,10 @@ useful for scripting. Use `--verbose` to list unmet dependencies.
 `--flatpak`
 
 : Add entries for Flatpak packages. Note: Linux only.
+
+`--mise`
+
+: Add entries for mise tools.
 
 `--krew`
 
@@ -4521,6 +4561,10 @@ command execution (e.g. `$(cat file)`).
 
 : If set, `brew bundle cleanup` will not clean up Mac App Store dependencies.
 
+`HOMEBREW_BUNDLE_CLEANUP_NO_MISE`
+
+: If set, `brew bundle cleanup` will not clean up mise tools.
+
 `HOMEBREW_BUNDLE_CLEANUP_NO_NPM`
 
 : If set, `brew bundle cleanup` will not clean up npm packages.
@@ -4569,6 +4613,10 @@ command execution (e.g. `$(cat file)`).
 `HOMEBREW_BUNDLE_DUMP_NO_MAS`
 
 : If set, `brew bundle dump` will not dump Mac App Store dependencies.
+
+`HOMEBREW_BUNDLE_DUMP_NO_MISE`
+
+: If set, `brew bundle dump` will not dump mise tools.
 
 `HOMEBREW_BUNDLE_DUMP_NO_NPM`
 

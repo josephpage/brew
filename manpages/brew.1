@@ -94,7 +94,7 @@ Uninstall formulae that were only installed as a dependency of another formula a
 \fB\-n\fP, \fB\-\-dry\-run\fP
 List what would be uninstalled, but do not actually uninstall anything\.
 .SS "\fBbundle\fP \fR[\fIsubcommand\fP]"
-Bundler for non\-Ruby dependencies from Homebrew formulae, Homebrew casks, Mac App Store dependencies, VSCode (and forks/variants) extensions, Go packages, Cargo packages, uv tools, Flatpak packages, WinGet packages, Krew plugins and npm packages\.
+Bundler for non\-Ruby dependencies from Homebrew formulae, Homebrew casks, Mac App Store dependencies, VSCode (and forks/variants) extensions, Go packages, Cargo packages, uv tools, Flatpak packages, WinGet packages, mise tools, Krew plugins and npm packages\.
 .P
 Note: Flatpak support is only available on Linux\.
 .TP
@@ -120,7 +120,7 @@ Check that all dependencies in the Brewfile are installed before starting the sh
 Attempt to remove secrets from the environment before starting the shell\.
 .TP
 \fBbrew bundle remove\fP \fIname\fP [\.\.\.]
-Remove entries that match \fBname\fP from your \fBBrewfile\fP\&\. Use \fB\-\-formula\fP, \fB\-\-cask\fP, \fB\-\-tap\fP, \fB\-\-mas\fP, \fB\-\-vscode\fP, \fB\-\-go\fP, \fB\-\-cargo\fP, \fB\-\-uv\fP, \fB\-\-flatpak\fP, \fB\-\-winget\fP, \fB\-\-krew\fP and \fB\-\-npm\fP to remove only entries of the corresponding type\. Passing \fB\-\-formula\fP also removes matches against formula aliases and old formula names\.
+Remove entries that match \fBname\fP from your \fBBrewfile\fP\&\. Use \fB\-\-formula\fP, \fB\-\-cask\fP, \fB\-\-tap\fP, \fB\-\-mas\fP, \fB\-\-vscode\fP, \fB\-\-go\fP, \fB\-\-cargo\fP, \fB\-\-uv\fP, \fB\-\-flatpak\fP, \fB\-\-winget\fP, \fB\-\-mise\fP, \fB\-\-krew\fP and \fB\-\-npm\fP to remove only entries of the corresponding type\. Passing \fB\-\-formula\fP also removes matches against formula aliases and old formula names\.
 .TP
 \fB\-\-install\fP
 Run \fBinstall\fP before removing entries\.
@@ -154,6 +154,9 @@ Remove entries for Flatpak packages\. Note: Linux only\.
 .TP
 \fB\-\-winget\fP
 Remove entries for WinGet packages\. Note: WSL only\.
+.TP
+\fB\-\-mise\fP
+Remove entries for mise tools\.
 .TP
 \fB\-\-krew\fP
 Remove entries for Krew plugins\.
@@ -201,6 +204,9 @@ List Flatpak packages\. Note: Linux only\.
 .TP
 \fB\-\-winget\fP
 List WinGet packages\. Note: WSL only\.
+.TP
+\fB\-\-mise\fP
+List mise tools\.
 .TP
 \fB\-\-krew\fP
 List Krew plugins\.
@@ -338,6 +344,9 @@ Dump Flatpak packages\. Note: Linux only\.
 \fB\-\-winget\fP
 Dump WinGet packages\. Note: WSL only\.
 .TP
+\fB\-\-mise\fP
+Dump mise tools\.
+.TP
 \fB\-\-krew\fP
 Dump Krew plugins\.
 .TP
@@ -385,6 +394,12 @@ Dump npm packages\.
 .TP
 \fB\-\-no\-dump\-winget\fP
 \fBdump\fP without WinGet packages\. Enabled by default if \fB$HOMEBREW_BUNDLE_DUMP_NO_WINGET\fP is set\.
+.TP
+\fB\-\-no\-mise\fP
+\fBdump\fP without mise tools\. Enabled by default if \fB$HOMEBREW_BUNDLE_DUMP_NO_MISE\fP is set\.
+.TP
+\fB\-\-no\-dump\-mise\fP
+\fBdump\fP without mise tools\. Enabled by default if \fB$HOMEBREW_BUNDLE_DUMP_NO_MISE\fP is set\.
 .TP
 \fB\-\-no\-krew\fP
 \fBdump\fP without Krew plugins\. Enabled by default if \fB$HOMEBREW_BUNDLE_DUMP_NO_KREW\fP is set\.
@@ -512,6 +527,15 @@ Clean up WinGet packages\. Note: WSL only\.
 \fB\-\-no\-cleanup\-winget\fP
 \fBcleanup\fP without WinGet packages\. Enabled by default if \fB$HOMEBREW_BUNDLE_CLEANUP_NO_WINGET\fP is set\.
 .TP
+\fB\-\-mise\fP
+Clean up mise tools\.
+.TP
+\fB\-\-no\-mise\fP
+\fBcleanup\fP without mise tools\. Enabled by default if \fB$HOMEBREW_BUNDLE_CLEANUP_NO_MISE\fP is set\.
+.TP
+\fB\-\-no\-cleanup\-mise\fP
+\fBcleanup\fP without mise tools\. Enabled by default if \fB$HOMEBREW_BUNDLE_CLEANUP_NO_MISE\fP is set\.
+.TP
 \fB\-\-krew\fP
 Clean up Krew plugins\.
 .TP
@@ -548,7 +572,7 @@ Do not check for outdated dependencies\. Note they may still be upgraded by \fBb
 Run \fBinstall\fP before checking dependencies\.
 .TP
 \fBbrew bundle add\fP \fIname\fP [\.\.\.]
-Add entries to your \fBBrewfile\fP\&\. Adds formulae by default\. Use \fB\-\-cask\fP, \fB\-\-tap\fP, \fB\-\-vscode\fP, \fB\-\-go\fP, \fB\-\-cargo\fP, \fB\-\-uv\fP, \fB\-\-flatpak\fP, \fB\-\-krew\fP and \fB\-\-npm\fP to add the corresponding entry instead\.
+Add entries to your \fBBrewfile\fP\&\. Adds formulae by default\. Use \fB\-\-cask\fP, \fB\-\-tap\fP, \fB\-\-vscode\fP, \fB\-\-go\fP, \fB\-\-cargo\fP, \fB\-\-uv\fP, \fB\-\-flatpak\fP, \fB\-\-mise\fP, \fB\-\-krew\fP and \fB\-\-npm\fP to add the corresponding entry instead\.
 .TP
 \fB\-\-install\fP
 Run \fBinstall\fP before adding entries\.
@@ -576,6 +600,9 @@ Add entries for uv tools\.
 .TP
 \fB\-\-flatpak\fP
 Add entries for Flatpak packages\. Note: Linux only\.
+.TP
+\fB\-\-mise\fP
+Add entries for mise tools\.
 .TP
 \fB\-\-krew\fP
 Add entries for Krew plugins\.
@@ -2873,6 +2900,9 @@ If set, \fBbrew bundle cleanup\fP will not clean up Krew plugins\.
 \fBHOMEBREW_BUNDLE_CLEANUP_NO_MAS\fP
 If set, \fBbrew bundle cleanup\fP will not clean up Mac App Store dependencies\.
 .TP
+\fBHOMEBREW_BUNDLE_CLEANUP_NO_MISE\fP
+If set, \fBbrew bundle cleanup\fP will not clean up mise tools\.
+.TP
 \fBHOMEBREW_BUNDLE_CLEANUP_NO_NPM\fP
 If set, \fBbrew bundle cleanup\fP will not clean up npm packages\.
 .TP
@@ -2908,6 +2938,9 @@ If set, \fBbrew bundle dump\fP will not dump Krew plugins\.
 .TP
 \fBHOMEBREW_BUNDLE_DUMP_NO_MAS\fP
 If set, \fBbrew bundle dump\fP will not dump Mac App Store dependencies\.
+.TP
+\fBHOMEBREW_BUNDLE_DUMP_NO_MISE\fP
+If set, \fBbrew bundle dump\fP will not dump mise tools\.
 .TP
 \fBHOMEBREW_BUNDLE_DUMP_NO_NPM\fP
 If set, \fBbrew bundle dump\fP will not dump npm packages\.

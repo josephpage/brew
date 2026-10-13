@@ -819,6 +819,7 @@ remove)
         --install
         --krew
         --mas
+        --mise
         --npm
         --quiet
         --tap
@@ -844,6 +845,7 @@ list)
         --install
         --krew
         --mas
+        --mise
         --npm
         --quiet
         --tap
@@ -929,6 +931,7 @@ dump)
         --install
         --krew
         --mas
+        --mise
         --no-cargo
         --no-cask
         --no-describe
@@ -939,6 +942,7 @@ dump)
         --no-dump-go
         --no-dump-krew
         --no-dump-mas
+        --no-dump-mise
         --no-dump-npm
         --no-dump-tap
         --no-dump-uv
@@ -949,6 +953,7 @@ dump)
         --no-go
         --no-krew
         --no-mas
+        --no-mise
         --no-npm
         --no-restart
         --no-tap
@@ -981,6 +986,7 @@ cleanup)
         --install
         --krew
         --mas
+        --mise
         --no-cargo
         --no-cask
         --no-cleanup-brew
@@ -990,6 +996,7 @@ cleanup)
         --no-cleanup-go
         --no-cleanup-krew
         --no-cleanup-mas
+        --no-cleanup-mise
         --no-cleanup-npm
         --no-cleanup-tap
         --no-cleanup-uv
@@ -1000,6 +1007,7 @@ cleanup)
         --no-go
         --no-krew
         --no-mas
+        --no-mise
         --no-npm
         --no-tap
         --no-uv
@@ -1042,6 +1050,7 @@ add)
         --help
         --install
         --krew
+        --mise
         --no-describe
         --npm
         --quiet
