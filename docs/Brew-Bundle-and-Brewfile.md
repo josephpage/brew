@@ -58,7 +58,7 @@ If this fails without `--verbose`, run `brew bundle check --verbose` to list unm
 
 ### Types
 
-As well as supporting formulae (`brew "..."`), you can also use `brew bundle` with casks, taps, Mac App Store apps, WinGet packages on WSL, VS Code extensions, Go packages, Cargo packages, npm packages, uv tools, Flatpak packages and krew kubectl plugins and to start background services with `brew services`.
+As well as supporting formulae (`brew "..."`), you can also use `brew bundle` with casks, taps, Mac App Store apps, WinGet packages on WSL, VS Code extensions, Go packages, Cargo packages, npm packages, uv tools, mise tools, Flatpak packages and krew kubectl plugins and to start background services with `brew services`.
 
 ```ruby
 tap "apple/apple"
@@ -74,6 +74,7 @@ cargo "ripgrep"
 cargo "bat", source: "https://github.com/sharkdp/bat"
 uv "mkdocs"
 uv "ruff", source: "git+https://github.com/astral-sh/ruff.git"
+mise "node@20"
 krew "ctx"
 flatpak "com.visualstudio.code"
 flatpak "org.godotengine.Godot", remote: "flathub-beta", url: "https://dl.flathub.org/beta-repo/"
@@ -87,6 +88,8 @@ If no Homebrew Python is installed, uv selects Python as usual.
 Already-installed tools keep their existing Python until reinstalled.
 
 A uv tool's `source:` must resolve on another machine, so a local path and the `file://` URL that `uv tool list` reports for one are both rejected when the `Brewfile` is parsed, in their plain and their `git+`-prefixed spellings alike. A tool installed from any of them is dumped without a `source:`.
+
+A mise tool is a request in mise's global config, written as `mise "node@20"`, and is installed with `mise use --global`. A tool with no version, such as `mise "node"`, requests the latest version, which is dumped without a version, so `mise "node"` and `mise "node@latest"` are the same entry. `brew bundle dump` lists every tool the global config requests, including one that is not installed yet, and `brew bundle cleanup` removes a tool that the `Brewfile` does not request with `mise unuse --global`, which also prunes its installation.
 
 A Cargo package's `source:` is a git URL (`https://`, `ssh://` or `git://`) and is installed with `cargo install --git`. Neither a local path nor a `file://` URL is accepted, since neither resolves on another machine, and a crate installed from one is dumped without a `source:`. The name is the crate's package name from its `Cargo.toml`, which is not always the name of the repository or of the binary it installs, so `brew bundle dump` output is the reliable thing to copy. A branch, tag or revision chosen when the package was installed is carried in the URL as `?branch=`, `?tag=` or `?rev=`, and is restored with the corresponding `cargo install` flag. Where none was chosen, only the repository is recorded and not the commit currently installed, so restoring a `Brewfile` builds the repository's default branch rather than the exact commit.
 
@@ -424,7 +427,7 @@ For the tradeoffs and alternatives, see [Locking installed formulae at specific 
 
 ## Adding new packages support
 
-`brew bundle` currently supports Homebrew formulae and casks, Mac App Store apps, WinGet packages on WSL, Visual Studio Code extensions and variants, Go packages, Cargo packages, npm packages, uv tools, Flatpak packages and krew kubectl plugins.
+`brew bundle` currently supports Homebrew formulae and casks, Mac App Store apps, WinGet packages on WSL, Visual Studio Code extensions and variants, Go packages, Cargo packages, npm packages, uv tools, mise tools, Flatpak packages and krew kubectl plugins.
 
 We are interested in contributions for other packages' installers/checkers/dumpers but they must:
 

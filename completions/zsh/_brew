@@ -178,7 +178,7 @@ __brew_internal_commands() {
     'bump-formula-pr:Create a pull request to update formula with a new URL or a new tag'
     'bump-revision:Create a commit to increment the revision of formula'
     'bump-unversioned-casks:Check all casks with unversioned URLs in a given tap for updates'
-    'bundle:Bundler for non-Ruby dependencies from Homebrew formulae, Homebrew casks, Mac App Store dependencies, VSCode (and forks/variants) extensions, Go packages, Cargo packages, uv tools, Flatpak packages, WinGet packages, Krew plugins and npm packages'
+    'bundle:Bundler for non-Ruby dependencies from Homebrew formulae, Homebrew casks, Mac App Store dependencies, VSCode (and forks/variants) extensions, Go packages, Cargo packages, uv tools, Flatpak packages, WinGet packages, mise tools, Krew plugins and npm packages'
     'casks:List all locally installable casks including short names'
     'cat:Display the source of a formula or cask'
     'cleanup:Remove stale lock files and outdated downloads for all formulae and casks, and remove old versions of installed formulae'
@@ -775,7 +775,7 @@ _brew_bundle() {
   local -a subcommands
   subcommands=(
     'sh:Run your shell in a `brew bundle exec` environment'
-    'remove:Remove entries that match `name` from your `Brewfile`. Use `--formula`, `--cask`, `--tap`, `--mas`, `--vscode`, `--go`, `--cargo`, `--uv`, `--flatpak`, `--winget`, `--krew` and `--npm` to remove only entries of the corresponding type. Passing `--formula` also removes matches against formula aliases and old formula names'
+    'remove:Remove entries that match `name` from your `Brewfile`. Use `--formula`, `--cask`, `--tap`, `--mas`, `--vscode`, `--go`, `--cargo`, `--uv`, `--flatpak`, `--winget`, `--mise`, `--krew` and `--npm` to remove only entries of the corresponding type. Passing `--formula` also removes matches against formula aliases and old formula names'
     'list:By default, only Homebrew formula dependencies are listed'
     'install:Use this to restore a recorded installed state from a `Brewfile`'
     'upgrade:Use this to restore a recorded installed state from a `Brewfile`'
@@ -785,7 +785,7 @@ _brew_bundle() {
     'dump:Write all installed casks/formulae/images/taps into a `Brewfile` in the current directory or to a custom file specified with the `--file` option. This is useful as an installed-state snapshot and can be kept in version control and diffed'
     'cleanup:This workflow is useful for maintainers or testers who regularly install lots of formulae'
     'check:This provides a successful exit code if everything is up-to-date, making it useful for scripting. Use `--verbose` to list unmet dependencies'
-    'add:Add entries to your `Brewfile`. Adds formulae by default. Use `--cask`, `--tap`, `--vscode`, `--go`, `--cargo`, `--uv`, `--flatpak`, `--krew` and `--npm` to add the corresponding entry instead'
+    'add:Add entries to your `Brewfile`. Adds formulae by default. Use `--cask`, `--tap`, `--vscode`, `--go`, `--cargo`, `--uv`, `--flatpak`, `--mise`, `--krew` and `--npm` to add the corresponding entry instead'
   )
 
   _arguments -C \
@@ -831,6 +831,7 @@ remove)
           '--install[Run `install` before removing entries]' \
           '(--no-krew --no-cleanup-krew --no-dump-krew)--krew[Remove entries for Krew plugins]' \
           '(--no-mas --no-cleanup-mas --no-dump-mas)--mas[Remove entries for Mac App Store dependencies]' \
+          '(--no-mise --no-cleanup-mise --no-dump-mise)--mise[Remove entries for mise tools]' \
           '(--no-npm --no-cleanup-npm --no-dump-npm)--npm[Remove entries for npm packages]' \
           '--quiet[Make some output more quiet]' \
           '(--no-tap --no-taps --no-cleanup-tap --no-dump-tap)--tap[Remove Homebrew tap entries]' \
@@ -854,6 +855,7 @@ list)
           '--install[Run `install` before listing dependencies]' \
           '(--no-krew --no-cleanup-krew --no-dump-krew)--krew[List Krew plugins]' \
           '(--no-mas --no-cleanup-mas --no-dump-mas)--mas[List Mac App Store dependencies]' \
+          '(--no-mise --no-cleanup-mise --no-dump-mise)--mise[List mise tools]' \
           '(--no-npm --no-cleanup-npm --no-dump-npm)--npm[List npm packages]' \
           '--quiet[Make some output more quiet]' \
           '(--no-tap --no-taps --no-cleanup-tap --no-dump-tap)--tap[List Homebrew tap dependencies]' \
@@ -931,6 +933,7 @@ dump)
           '--install[Run `install` before dumping dependencies]' \
           '(--no-krew --no-cleanup-krew --no-dump-krew)--krew[Dump Krew plugins]' \
           '(--no-mas --no-cleanup-mas --no-dump-mas)--mas[Dump Mac App Store dependencies]' \
+          '(--no-mise --no-cleanup-mise --no-dump-mise)--mise[Dump mise tools]' \
           '(--cargo)--no-cargo[`dump` without Cargo packages. Enabled by default if `$HOMEBREW_BUNDLE_DUMP_NO_CARGO` is set]' \
           '(--cask --casks)--no-cask[Dump without Homebrew cask dependencies. Enabled by default if `$HOMEBREW_BUNDLE_DUMP_NO_CASK` is set]' \
           '--no-describe[Do not add description comments above each line. Description comments are the default. Enabled by default if `$HOMEBREW_BUNDLE_NO_DESCRIBE` is set]' \
@@ -941,6 +944,7 @@ dump)
           '(--go)--no-dump-go[`dump` without Go packages. Enabled by default if `$HOMEBREW_BUNDLE_DUMP_NO_GO` is set]' \
           '(--krew)--no-dump-krew[`dump` without Krew plugins. Enabled by default if `$HOMEBREW_BUNDLE_DUMP_NO_KREW` is set]' \
           '(--mas)--no-dump-mas[`dump` without Mac App Store dependencies. Enabled by default if `$HOMEBREW_BUNDLE_DUMP_NO_MAS` is set]' \
+          '(--mise)--no-dump-mise[`dump` without mise tools. Enabled by default if `$HOMEBREW_BUNDLE_DUMP_NO_MISE` is set]' \
           '(--npm)--no-dump-npm[`dump` without npm packages. Enabled by default if `$HOMEBREW_BUNDLE_DUMP_NO_NPM` is set]' \
           '(--tap --taps)--no-dump-tap[Dump without Homebrew tap dependencies. Enabled by default if `$HOMEBREW_BUNDLE_DUMP_NO_TAP` is set]' \
           '(--uv)--no-dump-uv[`dump` without uv tools. Enabled by default if `$HOMEBREW_BUNDLE_DUMP_NO_UV` is set]' \
@@ -951,6 +955,7 @@ dump)
           '(--go)--no-go[`dump` without Go packages. Enabled by default if `$HOMEBREW_BUNDLE_DUMP_NO_GO` is set]' \
           '(--krew)--no-krew[`dump` without Krew plugins. Enabled by default if `$HOMEBREW_BUNDLE_DUMP_NO_KREW` is set]' \
           '(--mas)--no-mas[`dump` without Mac App Store dependencies. Enabled by default if `$HOMEBREW_BUNDLE_DUMP_NO_MAS` is set]' \
+          '(--mise)--no-mise[`dump` without mise tools. Enabled by default if `$HOMEBREW_BUNDLE_DUMP_NO_MISE` is set]' \
           '(--npm)--no-npm[`dump` without npm packages. Enabled by default if `$HOMEBREW_BUNDLE_DUMP_NO_NPM` is set]' \
           '--no-restart[Do not add `restart_service` to formula lines]' \
           '(--tap --taps)--no-tap[Dump without Homebrew tap dependencies. Enabled by default if `$HOMEBREW_BUNDLE_DUMP_NO_TAP` is set]' \
@@ -981,6 +986,7 @@ cleanup)
           '--install[Run `install` before cleaning up dependencies]' \
           '(--no-krew --no-cleanup-krew --no-dump-krew)--krew[Clean up Krew plugins]' \
           '(--no-mas --no-cleanup-mas --no-dump-mas)--mas[Clean up Mac App Store dependencies]' \
+          '(--no-mise --no-cleanup-mise --no-dump-mise)--mise[Clean up mise tools]' \
           '(--cargo)--no-cargo[`cleanup` without Cargo packages. Enabled by default if `$HOMEBREW_BUNDLE_CLEANUP_NO_CARGO` is set]' \
           '(--cask --casks)--no-cask[Clean up without Homebrew cask dependencies. Enabled by default if `$HOMEBREW_BUNDLE_CLEANUP_NO_CASK` is set]' \
           '(--formula --formulae --brews)--no-cleanup-brew[Clean up without Homebrew formula dependencies. Enabled by default if `$HOMEBREW_BUNDLE_CLEANUP_NO_BREW` is set]' \
@@ -990,6 +996,7 @@ cleanup)
           '(--go)--no-cleanup-go[`cleanup` without Go packages. Enabled by default if `$HOMEBREW_BUNDLE_CLEANUP_NO_GO` is set]' \
           '(--krew)--no-cleanup-krew[`cleanup` without Krew plugins. Enabled by default if `$HOMEBREW_BUNDLE_CLEANUP_NO_KREW` is set]' \
           '(--mas)--no-cleanup-mas[`cleanup` without Mac App Store dependencies. Enabled by default if `$HOMEBREW_BUNDLE_CLEANUP_NO_MAS` is set]' \
+          '(--mise)--no-cleanup-mise[`cleanup` without mise tools. Enabled by default if `$HOMEBREW_BUNDLE_CLEANUP_NO_MISE` is set]' \
           '(--npm)--no-cleanup-npm[`cleanup` without npm packages. Enabled by default if `$HOMEBREW_BUNDLE_CLEANUP_NO_NPM` is set]' \
           '(--tap --taps)--no-cleanup-tap[Clean up without Homebrew tap dependencies. Enabled by default if `$HOMEBREW_BUNDLE_CLEANUP_NO_TAP` is set]' \
           '(--uv)--no-cleanup-uv[`cleanup` without uv tools. Enabled by default if `$HOMEBREW_BUNDLE_CLEANUP_NO_UV` is set]' \
@@ -1000,6 +1007,7 @@ cleanup)
           '(--go)--no-go[`cleanup` without Go packages. Enabled by default if `$HOMEBREW_BUNDLE_CLEANUP_NO_GO` is set]' \
           '(--krew)--no-krew[`cleanup` without Krew plugins. Enabled by default if `$HOMEBREW_BUNDLE_CLEANUP_NO_KREW` is set]' \
           '(--mas)--no-mas[`cleanup` without Mac App Store dependencies. Enabled by default if `$HOMEBREW_BUNDLE_CLEANUP_NO_MAS` is set]' \
+          '(--mise)--no-mise[`cleanup` without mise tools. Enabled by default if `$HOMEBREW_BUNDLE_CLEANUP_NO_MISE` is set]' \
           '(--npm)--no-npm[`cleanup` without npm packages. Enabled by default if `$HOMEBREW_BUNDLE_CLEANUP_NO_NPM` is set]' \
           '(--tap --taps)--no-tap[Clean up without Homebrew tap dependencies. Enabled by default if `$HOMEBREW_BUNDLE_CLEANUP_NO_TAP` is set]' \
           '(--uv)--no-uv[`cleanup` without uv tools. Enabled by default if `$HOMEBREW_BUNDLE_CLEANUP_NO_UV` is set]' \
@@ -1038,6 +1046,7 @@ add)
           '--help[Show this message]' \
           '--install[Run `install` before adding entries]' \
           '(--no-krew --no-cleanup-krew --no-dump-krew)--krew[Add entries for Krew plugins]' \
+          '(--no-mise --no-cleanup-mise --no-dump-mise)--mise[Add entries for mise tools]' \
           '--no-describe[Do not add description comments above each line. Description comments are the default. Enabled by default if `$HOMEBREW_BUNDLE_NO_DESCRIBE` is set]' \
           '(--no-npm --no-cleanup-npm --no-dump-npm)--npm[Add entries for npm packages]' \
           '--quiet[Make some output more quiet]' \

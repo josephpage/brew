@@ -29,6 +29,7 @@ RSpec.describe Homebrew::Bundle::Dsl do
         go 'github.com/charmbracelet/crush'
         cargo 'ripgrep'
         uv 'mkdocs', with: ['mkdocs-material<10']
+        mise 'node@20'
       RUBY
     end
 
@@ -63,6 +64,7 @@ RSpec.describe Homebrew::Bundle::Dsl do
       expect(dsl.entries[13].name).to eql("ripgrep")
       expect(dsl.entries[14].name).to eql("mkdocs")
       expect(dsl.entries[14].options).to eql(with: ["mkdocs-material<10"])
+      expect(dsl.entries[15].name).to eql("node@20")
     end
   end
 
@@ -123,6 +125,11 @@ RSpec.describe Homebrew::Bundle::Dsl do
     it "accepts a uv source option" do
       dsl = dsl_from_string 'uv "ruff", source: "git+https://github.com/astral-sh/ruff.git"'
       expect(dsl.entries[0].options).to eql(source: "git+https://github.com/astral-sh/ruff.git")
+    end
+
+    it "drops a mise latest version request" do
+      dsl = dsl_from_string 'mise "node@latest"'
+      expect(dsl.entries[0].name).to eql("node")
     end
   end
 
