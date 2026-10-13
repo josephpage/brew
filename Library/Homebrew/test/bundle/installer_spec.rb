@@ -498,7 +498,7 @@ RSpec.describe Homebrew::Bundle::Installer do
     it "delegates entries to an extension that registers batch support" do
       first_entry = Homebrew::Bundle::Dsl::Entry.new(:npm, "typescript")
       second_entry = Homebrew::Bundle::Dsl::Entry.new(:npm, "prettier")
-      allow(Homebrew::Bundle::Npm).to receive_messages(preinstall!: true, reset!: nil)
+      allow(Homebrew::Bundle::Npm).to receive_messages(preinstall!: true, reset!: nil, install_verb: "Installing")
 
       expect(Homebrew::Bundle::Npm).to receive(:install_batch!)
         .with([first_entry, second_entry], verbose: false)
@@ -513,7 +513,7 @@ RSpec.describe Homebrew::Bundle::Installer do
       second_entry = Homebrew::Bundle::Dsl::Entry.new(:npm, "prettier")
       allow(Homebrew::Bundle::Npm).to receive(:preinstall!).with("typescript", any_args).and_return(true, false)
       allow(Homebrew::Bundle::Npm).to receive(:preinstall!).with("prettier", any_args).and_return(true, true)
-      allow(Homebrew::Bundle::Npm).to receive(:install_batch!).and_return(false)
+      allow(Homebrew::Bundle::Npm).to receive_messages(install_batch!: false, install_verb: "Installing")
       expect(Homebrew::Bundle::Npm).not_to receive(:install!).with("typescript", any_args)
       expect(Homebrew::Bundle::Npm).to receive(:install!)
         .with("prettier", preinstall: true, no_upgrade: false, verbose: false, force: false)
