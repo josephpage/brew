@@ -1,4 +1,4 @@
-# typed: true
+# typed: strict
 # frozen_string_literal: true
 
 require "bundle"
@@ -6,6 +6,7 @@ require "bundle/dsl"
 require "bundle/extensions/mise"
 
 RSpec.describe Homebrew::Bundle::Mise do
+  sig { returns(T::Array[T.any(Pathname, String)]) }
   let(:mise_list_args) { [Pathname("mise"), "ls", "--global", "--json"] }
 
   describe "entries" do
@@ -36,6 +37,7 @@ RSpec.describe Homebrew::Bundle::Mise do
   end
 
   describe "checking" do
+    sig { returns(Homebrew::Bundle::Mise) }
     subject(:checker) { described_class.new }
 
     describe "#installed_and_up_to_date?" do
@@ -72,6 +74,7 @@ RSpec.describe Homebrew::Bundle::Mise do
     end
 
     describe "#find_actionable" do
+      sig { returns(T::Array[Homebrew::Bundle::Dsl::Entry]) }
       let(:entries) do
         [
           Homebrew::Bundle::Dsl::Entry.new(:mise, "node@20"),
@@ -90,6 +93,7 @@ RSpec.describe Homebrew::Bundle::Mise do
   end
 
   describe "dumping" do
+    sig { returns(T.class_of(Homebrew::Bundle::Mise)) }
     subject(:dumper) { described_class }
 
     before do
